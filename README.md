@@ -2,19 +2,37 @@
 
 ![Static Badge](https://img.shields.io/badge/Welcome%20To-blue)
 
-![Static Badge](https://img.shields.io/badge/This%20Multinational%20Retail%20Data%20Centralisation%20Project-blue?logoSize=height%3D50)
+![Static Badge](https://img.shields.io/badge/The%20Multinational%20Retail%20Data%20Centralisation%20Project-blue)
 
-![Static Badge](https://img.shields.io/badge/By-blue)
+![Static Badge](https://img.shields.io/badge/A%20Data%20Training%20Project%20By-blue)
 
 ![Static Badge](https://img.shields.io/badge/Giles%20Williams-blue)
 
+## Introduction 
+
+![Static Badge](https://img.shields.io/badge/Project%20Summary%3A-blue)
+
+For a (fictional) multinational retail business, produce a system that stores their current sales data in a database so it acts as the single source of truth and can be accessed from one centralised location by the team.  
+
+![Static Badge](https://img.shields.io/badge/Project%20Scope%3A-blue)
+
+A multinational retail business, selling a range of just under 2,000 products across multiple vertical markets (including home goods and applicances, health and beauty, food and beverages and sports and leisure), is looking to update how they manage and use their data.
 
 Currently, their sales data is spread across many different data sources making it not easily accessible or analysable by current members of the team.
-In an effort to become more data-driven, your organisation would like to make its sales data accessible from one centralised location.
-Your first goal will be to produce a system that stores the current company data in a database so that it's accessed from one centralised location and acts as a single source of truth for sales data.
-You will then query the database to get up-to-date metrics for the business.
+In an effort to become more data-driven, the organisation would like to make its sales data accessible from one centralised location, allowing senrior management to view up-to-date metrics and help inform business decisions.
 
-## Introduction 
+The project is divided into 4 milestones:
+
+![Static Badge](https://img.shields.io/badge/Milestone%201%3A%20set%20up%20the%20dev%20environment-blue)
+
+![Static Badge](https://img.shields.io/badge/Milestone%202%3A%20extract%20and%20clean%20the%20data-blue)
+
+![Static Badge](https://img.shields.io/badge/Milestone%203%3A%20create%20the%20database%20schema-blue)
+
+![Static Badge](https://img.shields.io/badge/Milestone%204%3A%20analyse%20the%20data-blue)
+
+
+
 A description of the project: what it does, the aim of the project, and what you learned
 
 ## Installation Instructions
