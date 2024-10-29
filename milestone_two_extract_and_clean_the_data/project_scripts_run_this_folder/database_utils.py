@@ -28,7 +28,7 @@ class DatabaseConnector:
         Returns:
             credentials: a dictionary of the database credentials  
         """
-        with open('project_files/db_creds.yaml', 'r') as f:
+        with open('db_creds.yaml', 'r') as f:
             credentials = yaml.safe_load(f)
         return credentials
 
