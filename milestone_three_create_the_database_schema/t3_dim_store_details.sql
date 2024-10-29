@@ -1,11 +1,11 @@
 /* Task 3: Update the dim_store_details table. 
-   Merge two lattitude columns */
+   Firstly, merge the two lattitude columns */
 
 UPDATE dim_store_details
 SET 
     latitude = COALESCE(latitude, lat);
 
-/* Remove redundant lat column */
+/* Remove redundant 'lat' column */
 
 ALTER TABLE dim_store_details
     DROP COLUMN lat;

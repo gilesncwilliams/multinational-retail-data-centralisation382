@@ -1,4 +1,4 @@
-/* Task 1: Cast the columns of the order_table to the correct data types. */
+/* Task 1: Cast the columns of the orders_table to the correct data types. */
 
 ALTER TABLE orders_table
     ALTER COLUMN date_uuid TYPE UUID USING date_uuid::UUID;
@@ -17,7 +17,6 @@ ALTER TABLE orders_table
 
 ALTER TABLE orders_table
     ALTER COLUMN product_quantity TYPE SMALLINT;
-
 
 
 

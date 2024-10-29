@@ -1,4 +1,4 @@
-/* Update dim_date_times table data types */
+/* Task 6: update the dim_date_times table data types */
 
 ALTER TABLE dim_date_times
     ALTER COLUMN month TYPE VARCHAR(2);

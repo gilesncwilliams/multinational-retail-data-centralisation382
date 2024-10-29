@@ -1,4 +1,6 @@
-/* Remove '£' symbol from product_price column */
+/* Tasks 4 and 5: make change to the dim_products table to assist 
+   the delivery team, and update table with required data types.
+   Firstly, remove '£' symbol from product_price column */
 
 UPDATE dim_products
 SET
@@ -7,7 +9,8 @@ WHERE
     product_price LIKE '£%';
 
 /* Creating new weight_class column based on a range of product weights.
-   First query creates the new column and the second as the weight class to it */
+   The first query creates the new column, and the second uses a CASE aggregation 
+   to categorise the weights into classes for the delivery team. */
 
 ALTER TABLE dim_products
     ADD COLUMN weight_class VARCHAR(100);
@@ -20,7 +23,7 @@ SET weight_class = CASE
             ELSE 'Truck_Required'
             END;
 
-/* Update dim_products table data types */
+/* Updates dim_products table data types */
 
 ALTER TABLE dim_products
     ALTER COLUMN product_price TYPE NUMERIC USING product_price::NUMERIC(7,2);
@@ -40,8 +43,10 @@ ALTER TABLE dim_products
 ALTER TABLE dim_products
    ALTER COLUMN uuid TYPE UUID USING uuid::UUID;
 
-/* The next 3 statements update the 'removed' column to a new Boolean column named 'still_available'
-   Note the mis-spelling of 'Still_avaliable' in the original data set for this column */
+/* These queries update the existing 'removed' column to a new Boolean
+   column named 'still_available'.
+   Note the mis-spelling of values 'Still_avaliable' in the original data
+   set for this column */
 
 ALTER TABLE dim_products
     RENAME removed TO still_available;
@@ -55,7 +60,7 @@ SET still_available = CASE still_available
 ALTER TABLE dim_products
     ALTER COLUMN still_available TYPE BOOL USING still_available::BOOL;
 
-/* Removing the Unnamed: 0 column */
+/* Removes the Unnamed: 0 column from the table. */
 
 ALTER TABLE dim_products
     DROP COLUMN "Unnamed: 0";

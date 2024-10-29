@@ -1,3 +1,6 @@
+/* Task 9: add foreign keys to the orders table connecting it to the 
+   five 'dim' tables and creating the star-based schema of the database. */
+
 ALTER TABLE orders_table
     ADD CONSTRAINT dim_users_foreign_key 
     FOREIGN KEY (user_uuid) REFERENCES dim_users(user_uuid);

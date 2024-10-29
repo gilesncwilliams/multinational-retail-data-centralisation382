@@ -1,4 +1,4 @@
-/* Update dim_card_details table data types */
+/* Task 7: update the dim_card_details table data types */
 
 ALTER TABLE dim_card_details
     ALTER COLUMN card_number TYPE VARCHAR(20);

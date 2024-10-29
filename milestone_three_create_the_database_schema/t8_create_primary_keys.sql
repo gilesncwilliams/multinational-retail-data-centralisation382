@@ -1,4 +1,4 @@
-/* Add Primary Keys to dim tables */
+/* Task 6: add Primary Keys to the 5 'dim' tables */
 
 ALTER TABLE dim_users 
     ADD CONSTRAINT dim_users_primary_key PRIMARY KEY (user_uuid);
