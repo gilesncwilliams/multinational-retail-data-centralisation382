@@ -91,7 +91,7 @@ For Mac and Window users, follow this [link](https://www.enterprisedb.com/downlo
 
 To create a database, open pgAdmin and right click on Databases and select 'Create' then 'Database'.
 
-![alt text](<../Screenshot 2024-10-28 at 11.39.56.png>)
+![alt text](<README images and gifs/image.png>)
 
 Name your database, e.g. 'sales_data' and copy the details below from your database as you will need them for the upload to database function later.
 
@@ -111,14 +111,14 @@ Name your database, e.g. 'sales_data' and copy the details below from your datab
 
 1. Firstly, update your PostgreSQL database details created above in the upload_to_db function in the database_utils.py script, and save it without changing the files name. For example:
 
-![alt text](<../Screenshot 2024-10-25 at 16.26.55.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 11.39.56.png>)
 
 
 2. To run the pipeline to extract and clean the data from the multiple data sources, navigate to the 'milestone_two_extract_and_clean_the_data' folder in your terminal.
    
    Then type 'python3 project_scripts_run_this_folder' in your terminal to run the full data cleaning pipeline, extracting each data source in turn and uploading it to your PostgreSQL database in pgDAmin.
 
-   ![alt text](<../Run project giff.gif>)
+   ![alt text](<README images and gifs/Run project gif.gif>)
    
    I have included .info() and .head() print statements on each Pandas dataframe so you can see the data as it is cleaned in the terminal and review the results.
 
@@ -128,11 +128,11 @@ Name your database, e.g. 'sales_data' and copy the details below from your datab
 
 3. To create the database schema, switch to pgAdmin and open each of the sql files in turn (see gif below). They are ordered based on each task (t1, t2, etc) and each file relates to the data cleaning and setting up requried for each of the tables in ther database, plus the creation of the primary and foreign keys. 
 
-![alt text](<../import sql file in pgadmin.gif>)
+![alt text](<README images and gifs/import sql file in pgadmin.gif>)
 
 Run each sql script in turn by importing and clicking the play button in the query window (or highlight each query and use shortcut F5)
 
-![alt text](<../run sql file in pg admin.gif>)
+![alt text](<README images and gifs/run sql file in pg admin.gif>)
 
 
 4. To view the queries run on the business's sales data, import the m4_query_the_data_all_tasks.sql into pgAmin and run each query by highlighting a query one at a time to view the results.
@@ -180,7 +180,7 @@ Task 6: clean_data_events_ data function
 
 After cleaning and upload the data to PostgreSQL, and assiging primary and foreign keys with SQL, the resulting star-based schema for the database in pgAdmin looks like this:
 
-![alt text](../multinational_retail_data_centralisation_project.png)
+![alt text](<README images and gifs/multinational_retail_data_centralisation_project.png>)
 
 
 
@@ -192,56 +192,56 @@ Below are the results of SQL queries in Milestone 4 run on the database to answe
 
 1. How many stores does the business have and in which countires?
 
-![alt text](<../Screenshot 2024-10-28 at 10.39.12.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.39.12.png>)
 
 Using the COUNT aggregate function, grouped by country_code to identify the total number of stores in each country, and then displayed in descending order.
 
 
 2. Which locations currently have the most stores?
 
-![alt text](<../Screenshot 2024-10-28 at 10.39.29.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.39.29.png>)
 
 Using the COUNT aggregate function, grouped by locality to identify the locations with the most stores, and then displayed in descending order.
 
 3. Which months produced the largest amount of sales?
 
-![alt text](<../Screenshot 2024-10-28 at 10.39.55.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.39.55.png>)
 
 Joining the dim_date_times and dim_products tables to the orders_table to collate the required information for sales and product details, then using the SUM aggregate function, grouped by month, to calculate the total sales for each month and displayed in descending order.
 
 4. How many sales are coming from online?
 
-![alt text](<../Screenshot 2024-10-28 at 10.40.13.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.40.13.png>)
 
 Starting by joining the dim_store_details table to the order_table on their keys, then using a CASE statement to evaluate the 'store_type' column to categorise each store type into either 'Web' or 'Offline' for the bricks and mortar stores.  Finally, using the COUNT and SUM aggreate functions to calculate the number of sales and product quantities sold for each store category.
 
 5. What percentage of sales come through each type of store?
 
-![alt text](<../Screenshot 2024-10-28 at 10.40.30.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.40.30.png>)
 
 Creating a joined table from the orders_table, dim_products and dim_store_details tables, then using a window function to calculate the percentage of total sales for each type of store (we want the function to be applied to the full result so no partioning or ordering is required). The result is displayed in descending order.
 
 6. Which month in each year produced the highest cost of sales?
 
-![alt text](<../Screenshot 2024-10-28 at 10.41.04.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.41.04.png>)
 
 Again, from the orders_table, dim_date_times and products_table creating a joined table containing all the orders and sales data, and then using the SUM aggregate function to find the total sales, grouped by year and month to identify the best monthly performance, before being displayed in descending order.
 
 7. What is our staff headcount?
 
-![alt text](<../Screenshot 2024-10-28 at 10.41.20.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.41.20.png>)
 
 A simple SUM aggregate function to calculate the staff numbers grouped by each country, displayed in descending order.
 
 8. Which German store type is selling the most?
 
-![alt text](<../Screenshot 2024-10-28 at 10.41.38.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.41.38.png>)
 
 Using the same joined table from Q5 to collate the sales data for each store, then, with a WHERE statement to identify the German stores, group by store type.
 
 9. How quickly is the company making sales?
 
-![alt text](<../Screenshot 2024-10-28 at 10.41.58.png>)
+![alt text](<README images and gifs/Screenshot 2024-10-28 at 10.41.58.png>)
 
 Here we have employed a common table expression containing a LEAD() window function to calculate the time taken between each sale for all the orders in the dim_date_times table. 
 
