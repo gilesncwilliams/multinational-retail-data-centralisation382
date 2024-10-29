@@ -1,3 +1,5 @@
 # git should not track the database crendentials in this file 
 
 db_creds.yaml
+
+.DS_Store
