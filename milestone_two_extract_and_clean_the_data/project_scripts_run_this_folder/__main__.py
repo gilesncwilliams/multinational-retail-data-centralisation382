@@ -25,7 +25,7 @@ from data_cleaning import DataCleaning
 # Below code blocks are for task 3: extact the user data from RDS. 
 # Firstly, setting up the connection with functions from 
 # the DatabaseConnector class, then extracting the list of tables
-# to get the name of the usesrs table.
+# to get the name of the users table.
 credentials = DatabaseConnector.read_db_creds()
 engine = DatabaseConnector.init_db_engine(credentials)
 list_of_tables = DatabaseConnector.list_db_tables(engine)

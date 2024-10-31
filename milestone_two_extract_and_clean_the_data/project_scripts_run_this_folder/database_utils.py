@@ -1,9 +1,6 @@
 """
 Facilitates the connection to a PostgreSQL database.
 
-Contains multiple function for data cleaning Pandas Dataframes based
-on specific cleaning requirments for each data source of sales data. 
-
 Classes:
     DatabaseConnector
 

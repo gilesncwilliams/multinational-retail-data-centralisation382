@@ -1,5 +1,5 @@
 """
-Function to extract data from a variety of data sources.
+Functions to extract data from a variety of data sources.
 
 Classes:
     DataExtractor
