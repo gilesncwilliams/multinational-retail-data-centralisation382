@@ -2,21 +2,11 @@
 Clean data extracted from a retail business's varied data sources.
 
 Contains multiple function for data cleaning Pandas Dataframes based on 
-specific cleaning requirments for each data source of sales data. 
+specific cleaning requirements for each data source of sales data. 
 
 Classes:
     DataCleaning
 
-Functions:
-    remove_null_values(pandas.Dataframe) -> pandas.Dataframe
-    clean_user_data(pandas.Dataframe) -> pandas.Dataframe
-    clean_card_data(pandas.Dataframe) -> pandas.Dataframe
-    clean_store_data(pandas.Dataframe) -> pandas.Dataframe
-    weight_conversion(object) -> string
-    convert_product_weights(pandas.Dataframe) -> pandas.Dataframe
-    clean_products_data(pandas.Dataframe) -> pandas.Dataframe
-    clean_orders_data(pandas.Dataframe) -> pandas.Dataframe
-    clean_date_events_data(pandas.Dataframe) -> pandas.Dataframe
 """
 
 import numpy as np
@@ -29,12 +19,21 @@ class DataCleaning:
     Each of the multiple data sources created by the business needs specific 
     data cleaning functions applied to it before uploading to a new SQL 
     database for analysis.
-    
-    Attributes:
-        df: a Pandas dataframe.
-        weight: weight as a string that needs converting to KGs. 
+
+    Functions:
+    remove_null_values(pandas.Dataframe) -> pandas.Dataframe
+    clean_user_data(pandas.Dataframe) -> pandas.Dataframe
+    clean_card_data(pandas.Dataframe) -> pandas.Dataframe
+    clean_store_data(pandas.Dataframe) -> pandas.Dataframe
+    weight_conversion(object) -> string
+    convert_product_weights(pandas.Dataframe) -> pandas.Dataframe
+    clean_products_data(pandas.Dataframe) -> pandas.Dataframe
+    clean_orders_data(pandas.Dataframe) -> pandas.Dataframe
+    clean_date_events_data(pandas.Dataframe) -> pandas.Dataframe
+
     """
 
+    @staticmethod    
     def remove_null_values(df):
         """Removes rows containing only NULL values from the table.
 
@@ -52,6 +51,7 @@ class DataCleaning:
         df = df.dropna(how='all')
         return df
     
+    @staticmethod
     def clean_user_data(df):
         """Applies data cleaning functions to the customer user data.
 
@@ -68,11 +68,17 @@ class DataCleaning:
             df: a Pandas dataframe  
         """ 
         df = DataCleaning.remove_null_values(df)
-        df.join_date = pd.to_datetime(df.join_date, errors='coerce', dayfirst=True, format='mixed')
+        df.join_date = pd.to_datetime(
+            df.join_date, 
+            errors='coerce', 
+            dayfirst=True, 
+            format='mixed'
+        )
         df = df.dropna()
         df['country_code'] = df['country_code'].str.replace('GGB', 'GB')
         return df
     
+    @staticmethod
     def clean_card_data(df):
         """Applies data cleaning functions to the users' credit card data.
 
@@ -89,7 +95,12 @@ class DataCleaning:
             df: a Pandas dataframe  
         """ 
         df = DataCleaning.remove_null_values(df)
-        df.date_payment_confirmed = pd.to_datetime(df.date_payment_confirmed, errors='coerce', dayfirst=True, format='mixed')
+        df.date_payment_confirmed = pd.to_datetime(
+            df.date_payment_confirmed, 
+            errors='coerce', 
+            dayfirst=True, 
+            format='mixed'
+        )
         df = df.dropna()
         # fixes the card number errors 
         df = df.astype({'card_number': 'string'})
@@ -98,6 +109,7 @@ class DataCleaning:
         df = df.drop_duplicates(subset='card_number')
         return df
     
+    @staticmethod
     def clean_store_data(df):
         """Applies data cleaning functions to the retail business's store data.
 
@@ -112,16 +124,45 @@ class DataCleaning:
         Returns:
             df: a Pandas dataframe  
         """ 
+
+        # Remove rows with null values using the custom DataCleaning method
         df = DataCleaning.remove_null_values(df)
-        df.opening_date = pd.to_datetime(df.opening_date, errors='coerce', dayfirst=True, format='mixed')
+
+        # Convert the 'opening_date' column to datetime, handling errors and specifying the format
+        df.opening_date = pd.to_datetime(
+            df.opening_date,
+            errors='coerce',  # Coerce invalid dates into NaT (Not a Time)
+            dayfirst=True,   
+            format='mixed'    
+        )
+
+        # Drop rows where 'opening_date' is NaT (after coercion of invalid dates)
         df = df.dropna(subset=['opening_date'])
+
+        # Replace occurrences of 'eeAmerica' with 'America' in the 'continent' column
         df['continent'] = df['continent'].str.replace('eeAmerica', 'America')
+
+        # Replace occurrences of 'eeEurope' with 'Europe' in the 'continent' column
         df['continent'] = df['continent'].str.replace('eeEurope', 'Europe')
+
+        # Strip leading and trailing spaces from the 'staff_numbers' column
         df['staff_numbers'] = df['staff_numbers'].str.strip()
-        df['staff_numbers'] = df['staff_numbers'].str.replace(r'[^0-9]+', '', regex=True)
+
+        # Replace non-numeric characters with an empty string (keeping only numbers) in 'staff_numbers'
+        df['staff_numbers'] = df['staff_numbers'].str.replace(
+            r'[^0-9]+', '',  # Regex to match anything that is not a number
+            regex=True        # Ensure regex replacement
+        )
+
+        # Convert the 'staff_numbers' column to an integer type
         df['staff_numbers'] = df['staff_numbers'].astype(int)
+
+        # Return the cleaned DataFrame
         return df
+
+
     
+    @staticmethod
     def weight_conversion(weight):
         """Applies weight conversion functions to weight of products.
 
@@ -158,6 +199,7 @@ class DataCleaning:
             weight = float(weight) / 35.274
         return weight
 
+    @staticmethod
     def convert_product_weights(df):
         """Removes whitespace and null columns and applies weight conversion.
 
@@ -172,13 +214,15 @@ class DataCleaning:
         """ 
         df = DataCleaning.remove_null_values(df)
         # As the products.csv alraedy includes an 'index' column without any NULL values, 
-        # this specific funtions requires a .dropna() with threshold set to 2 to remove rows containing NULLs other than the index column. 
+        # this specific funtions requires a .dropna() with threshold set to 2 to 
+        # remove rows containing NULLs other than the index column. 
         df = df.dropna(thresh=2)
         df['weight'] = df['weight'].str.strip()
         df['weight'] = df['weight'].str.replace('ml', 'g')
         df['weight'] = df['weight'].apply(DataCleaning.weight_conversion)
         return df
 
+    @staticmethod
     def clean_products_data(df):
         """Applies data cleaning functions to the product data.
 
@@ -195,11 +239,16 @@ class DataCleaning:
             df: a Pandas dataframe  
         """ 
         df = DataCleaning.remove_null_values(df)
-        df.date_added = pd.to_datetime(df.date_added, errors='coerce', dayfirst=True, format='mixed')
+        df.date_added = pd.to_datetime(
+            df.date_added,
+            errors='coerce',
+            dayfirst=True,
+            format='mixed')
         df = df.dropna(subset=['date_added'])
         df = df.astype({'weight' : 'float'})
         return df
     
+    @staticmethod
     def clean_orders_data(df):
         """Applies data cleaning functions to the sales orders data.
 
@@ -216,6 +265,7 @@ class DataCleaning:
         df = df.drop(columns=['first_name', 'last_name', '1'])
         return df
    
+    @staticmethod
     def clean_date_events_data(df):
         """Applies data cleaning functions to the sales orders date events data.
 
@@ -231,8 +281,13 @@ class DataCleaning:
             df: a Pandas dataframe  
         """  
         df = DataCleaning.remove_null_values(df)
-        df['date_timestamp'] = pd.to_datetime(df['year'] + '-' + df['month'] + '-' + df['day'] + ' ' + df['timestamp'], errors='coerce')
-        df[['year', 'month', 'day']] = df[['year', 'month', 'day']].apply(pd.to_numeric, errors='coerce')
+        df['date_timestamp'] = pd.to_datetime(
+            df['year'] + '-' + df['month'] + '-' + df['day'] + ' ' + df['timestamp'],
+            errors='coerce'
+        )
+        df[['year', 'month', 'day']] = df[['year', 'month', 'day']].apply(
+            pd.to_numeric, errors='coerce'
+        )
         df = df.dropna() 
         df = df.astype({'year': 'int', 'month': 'int', 'day' : 'int'})
         return df

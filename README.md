@@ -15,7 +15,7 @@
 - Installation Instructions
 - Usage Instructions
 - Task's Data Cleaning Considerations
-- Resulting ERD and Answers to SQL Queries
+- Resulting ERD Diagram and Answers to SQL Queries
 - Project File Structure
 - Licensing Information
 
@@ -26,7 +26,7 @@
 
 ![Static Badge](https://img.shields.io/badge/Project%20Summary%3A-blue)
 
-The project goal is to produce a system for a fictional multinational retail business to store its historical sales data into a database, which will act as the single source of truth for the business and can be accessed from one centralised location.  
+The project goal is to create a data pipeline for a hypothetical multinational retail business to store its historical sales data into a database, which will act as the single source of truth for the business.
 
 
 ![Static Badge](https://img.shields.io/badge/Project%20Scope%3A-blue)
@@ -39,21 +39,21 @@ My task was to extract the data from the multitude of data sources (e.g. sales o
 
 The project was designed to test my knowlege of Git and GitHub, Python (including and Object Orientated Programming and data cleaning package Pandas), SQL language and PostgresQL database.
 
-The project is divided into 4 milestones:
+The project is divided into 4 main tasks:
 
-![Static Badge](https://img.shields.io/badge/Milestone%201%3A%20set%20up%20the%20dev%20environment-blue)
+![Static Badge](https://img.shields.io/badge/1%3A%20Set%20up%20the%20dev%20environment-blue)
 
 Setting a GitHub repo, local conda environment and database in pgAdmin4.
 
-![Static Badge](https://img.shields.io/badge/Milestone%202%3A%20extract%20and%20clean%20the%20data-blue)
+![Static Badge](https://img.shields.io/badge/2%3A%20Extract%20and%20clean%20the%20data-blue)
 
 Extract the data from multiple sources and clean it with Pandas before uploading to a PostgreSQL database.
 
-![Static Badge](https://img.shields.io/badge/Milestone%203%3A%20create%20the%20database%20schema-blue)
+![Static Badge](https://img.shields.io/badge/3%3A%20Create%20the%20database%20schema-blue)
 
 Using SQL, cast the columns in each table in the database to the correct datatype, and assign primary and foreigh keys to create the star-based scheme of the database. 
 
-![Static Badge](https://img.shields.io/badge/Milestone%204%3A%20analyse%20the%20data-blue)
+![Static Badge](https://img.shields.io/badge/4%3A%20Analyse%20the%20data-blue)
 
 Write SQL queries to answer questions asked by the business about the sales data.
 
@@ -89,11 +89,11 @@ Firstly, install PostgreSQL and pgAmin4 to your local machine to manage the data
 
 For Mac and Window users, follow this [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) and select the version according to your OS. Then select the latest version and follow instructions to install. You will be asked to create a password for your new user during the installation. You will need the password to connect to the database later to please keep a record of it.
 
-To create a database, open pgAdmin and right click on Databases and select 'Create' then 'Database'.
+To create a database, open pgAdmin and right click on Databases and select 'Create' then 'Database'. 
 
 ![alt text](<README images and gifs/image.png>)
 
-Name your database, e.g. 'sales_data' and copy the details below from your database as you will need them for the upload to database function later.
+Name your database, e.g. 'sales_data'. Once ready, make a note of the details below by right clicking on 'PostgreSQL 13' and selecting Properties. 
 
 - DATABASE_TYPE = 'postgresql'
 - DBAPI = 'psycopg2'
@@ -103,18 +103,22 @@ Name your database, e.g. 'sales_data' and copy the details below from your datab
 - DATABASE = '{your database name}'
 - PORT = 5432
 
+The init_pg_engine function in the DatabaseConnector class is set up with the most common settings.
 
 ## Usage Instructions
 
 ![Static Badge](https://img.shields.io/badge/How%20to%20run%20the%20data%20cleaning%20pipeline-blue)
 
 
-1. Firstly, update your PostgreSQL database details created above in the upload_to_db function in the database_utils.py script, and save it without changing the files name. For example:
+1. Firstly, if your PostgreSQL database details match the above, then you just need to pass into the below line of code in the __main__.py file with the credentials of the AWS RDS database you are connecting to, the name of your PostgreSQL database and user password.
 
-![alt text](<README images and gifs/Screenshot 2024-10-28 at 11.39.56.png>)
+db_connector = DatabaseConnector("db_creds.yaml", "sales_data", "example_password") 
 
+If your PostgreSQL database details are different then add the changes as arguments to the below line of code in the __main__.py. E.g.
 
-2. To run the pipeline to extract and clean the data from the multiple data sources, navigate to the 'milestone_two_extract_and_clean_the_data' folder in your terminal.
+pg_engine = db_connector.init_pg_engine(pg_user="new_user", pg_host="newhost", pg_port=1234)
+
+2. To run the pipeline to extract and clean the data from the multiple data sources, navigate to the 'extract_and_clean_the_data_scripts' folder in your terminal.
    
    Then type 'python3 project_scripts_run_this_folder' in your terminal to run the full data cleaning pipeline, extracting each data source in turn and uploading it to your PostgreSQL database in pgDAmin.
 
@@ -123,8 +127,6 @@ Name your database, e.g. 'sales_data' and copy the details below from your datab
    I have included .info() and .head() print statements on each Pandas dataframe so you can see the data as it is cleaned in the terminal and review the results.
 
    Once the pipeline has been run, refresh your PostgreSQL database in pgAdmin to see the newly imported tables (right click on the database name and select 'refresh')
-
-
 
 3. To create the database schema, switch to pgAdmin and open each of the sql files in turn (see gif below). They are ordered based on each task (t1, t2, etc) and each file relates to the data cleaning and setting up requried for each of the tables in ther database, plus the creation of the primary and foreign keys. 
 
@@ -135,13 +137,13 @@ Run each sql script in turn by importing and clicking the play button in the que
 ![alt text](<README images and gifs/run sql file in pg admin.gif>)
 
 
-4. To view the queries run on the business's sales data, import the m4_query_the_data_all_tasks.sql into pgAmin and run each query by highlighting a query one at a time to view the results.
+4. To view the queries run on the business's sales data, import the query_the_data.sql into pgAmin and run each query by highlighting a query one at a time to view the results.
 
 
 ## Task's Data Cleaning Considerations
 
 
-During the data cleaning tasks of the project (Milestone 2), there were several issues with the data that I identified and cleaned.
+During the data cleaning tasks of the project, there were several issues with the data that I identified and cleaned.
 
 These issue are listed below, along with solutions I employed using Pandas data cleaning package to resolve them. Each task contains references to the specific Python functions that I created to clean each dataframe stored within in the data_cleaning.py file.
 
@@ -151,25 +153,25 @@ Following this, any columns with obvious date/time values were converted into a 
 
 In addition, for each Pandas dataframe, some specific data cleaning was required:
 
-Task 3: clean_user_data function.
+clean_user_data function.
 - A small number of values had mis-spelt 'GB' country codes and were corrected with the str.replace() function in Pandas.
 
-Task 4: clean_card_data function.
+clean_card_data function.
 - Some rows contained incorrect values, formatting the date_payment_confirmed column turned those values to NULL, which meant those rows could be easily identified and dropped.
 - Some credit cards had typing errors with a '?' at the front of the card numbers. I used the str.replace() function to remove these, after converting to a string data type.
 - Any duplicate card numbers were also dropped.
 
-Task 5: clean_store_data function
+clean_store_data function
 - Corrected errors in the 'continent' column. Replacing 'eeAmerica' and 'eeEurope' with the correct continents using the str.repalce() function.
 - Removed any symbols, letters, or non-digit characters from the 'store_numbers' columne with the str.replace() function.
 
-Task 6: convert_product_weights and clean_products_data functions
+convert_product_weights and clean_products_data functions
 - As the weight data had been recorded in multiple measurements (g, kgs, oz, ml), each one of these needed to be converted to KGs. I created a 'weight_conversion' function containing an if statement to apply a different conversion method to each measurement type within the data set; as well removing some small errors with additional characters (e.g. '.').
 
-Task 7: clean_order_data function
+clean_order_data function
 - Drop unwanted columns 'first_name', 'last_name', '1' using Pandas .drop() function.
 
-Task 6: clean_data_events_ data function
+clean_data_events_ data function
 - Created a new data_timestamp column for each sale using the existing 'year', 'month' and 'day' columns using the pd.to.datetime(function) for later use in the project. 
 
 
@@ -187,8 +189,9 @@ After cleaning and upload the data to PostgreSQL, and assiging primary and forei
 ![Static Badge](https://img.shields.io/badge/Querying%20the%20Data-blue)
 
 
-Below are the results of SQL queries in Milestone 4 run on the database to answer business related questions, and the details behind the relevant SQL functions applied.
-(See m4_query_the_data_all_tasks.sql file to view each of the SQL queries.)
+Below are the results of SQL business queries run on the database to answer business related questions, and the details behind the relevant SQL functions applied.
+
+query_the_data.sql file location: multinational-retail-data-centralisation382/sql_business_queries/query_the_data.sql
 
 1. How many stores does the business have and in which countires?
 
@@ -252,7 +255,7 @@ We then perform an average calculation on the CTE to find the resulting average 
 
 
  * multinational-retail-data-centralisation382
-   * milestone_two_extract_and_clean_the_data
+   * extract_and_clean_the_data_scripts
      * project_files
        * db_creds.yaml
      * project_scripts_run_this_folder
@@ -260,7 +263,7 @@ We then perform an average calculation on the CTE to find the resulting average 
        * data_cleaning.py
        * data_extraction.py
        * database_utils.py
-   * milestone_three_create_the_database_schema
+   * sql_create_database_schema_queries
      * t1_orders_table.sql
      * t2_dim_users.sql
      * t3_dim_store_details.sql
@@ -269,8 +272,8 @@ We then perform an average calculation on the CTE to find the resulting average 
      * t7_dim_card_details.sql
      * t8_create_primary_keys.sql
      * t9_add_foreign_keys.sql
-   * milestone_four_query_the_data
-     * m4_query_the_data_all_tasks.sql
+   * sql_business_queries
+     * query_the_data.sql
    * README.md
    * .gitignore                           
 
@@ -278,5 +281,3 @@ We then perform an average calculation on the CTE to find the resulting average 
 
 ## License Information
 This repo is unlicensed as it was intended only for training purposes.
-
-

@@ -4,13 +4,6 @@ Functions to extract data from a variety of data sources.
 Classes:
     DataExtractor
 
-Functions:
-    read_rds_table(rds sql table) -> pandas.Dataframe
-    retrieve_pdf_data(pdf flie) -> pandas.Dataframe
-    list_number_of_stores(api connection) -> integer
-    retrieve_stores_data(api connection) -> pandas.Dataframe
-    extract_from_S3 (csv) -> pandas.Dataframe
-    extract_json_from_S3(json) -> pandas.Dataframe
 """
 
 import boto3
@@ -26,8 +19,30 @@ class DataExtractor:
     from AWS RDS, S3, API, and converting PDF, JSON and CSV files 
     into Pandas dataframes prior to cleaning. 
 
+    The staticmethods are specific to the extraction of those
+    individual table from the RDS database.
+
+    Functions:
+    read_rds_table(rds sql table) -> pandas.Dataframe
+    retrieve_pdf_data(pdf flie) -> pandas.Dataframe
+    list_number_of_stores(api connection) -> integer
+    retrieve_stores_data(api connection) -> pandas.Dataframe
+    extract_from_S3 (csv) -> pandas.Dataframe
+    extract_json_from_S3(json) -> pandas.Dataframe
+
     """
-    def read_rds_table(table_name, engine):
+
+    def __init__(self, table_name, rds_engine):
+        """Initializes the DataExtractor class with a table name and engine.
+
+            Args:
+                table_name (str): The name of the RDS table to be read.
+                rds_engine (str): The RDS engine connection.
+        """
+        self.table_name = table_name
+        self.rds_engine = rds_engine
+
+    def read_rds_table(self):
         """Reads an AWS RDS database table.
     
         Args:
@@ -37,10 +52,11 @@ class DataExtractor:
         Returns:
             df: a Pandas dataframe.
         """
-        df = pd.read_sql_table(table_name, engine)
+        df = pd.read_sql_table(self.table_name, self.rds_engine)
         return df
     
-    def retrieve_pdf_data():
+    @staticmethod
+    def retrieve_pdf_data(pdf_url):
         """Reads a pdf file and converts to a Pandas dataframe.
     
         Uses the tabula-py package to extract data from a pdf 
@@ -49,10 +65,11 @@ class DataExtractor:
         Returns:
             pdf_df: a Pandas dataframe.
         """
-        pdf = tabula.read_pdf('https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf', pages='all')
+        pdf = tabula.read_pdf(pdf_url, pages='all')
         pdf_df = pd.concat(pdf)
         return pdf_df
-
+    
+    @staticmethod
     def list_number_of_stores(number_of_stores_endpoint, header_details):
         """Lists the number of stores using an API get method.
     
@@ -71,6 +88,7 @@ class DataExtractor:
             number_of_stores = response.json()
         return number_of_stores
     
+    @staticmethod
     def retrieve_stores_data(retrieve_a_store_endpoint, header_details):
         """Retrieves data for a retail store from it's API endpoint.
     
@@ -84,11 +102,15 @@ class DataExtractor:
         Returns:
             store_data_df: a Pandas dataframe of the store data.
         """
-        response = requests.get(retrieve_a_store_endpoint, headers=header_details)
+        response = requests.get(
+            retrieve_a_store_endpoint,
+            headers=header_details
+        )
         store_data = response.json()
         store_data_df = pd.DataFrame(data=store_data, index=[0])
         return store_data_df
     
+    @staticmethod
     def extract_from_s3(s3_address):
         """Extract data from an AWS S3 bucket and converts to Pandas dataframe.
     
@@ -103,10 +125,15 @@ class DataExtractor:
         """
         s3_address_split = s3_address.split('/')
         s3 = boto3.client('s3')
-        s3.download_file(s3_address_split[2], s3_address_split[3], s3_address_split[3])
+        s3.download_file(
+            s3_address_split[2],
+            s3_address_split[3],
+            s3_address_split[3]
+        )
         file_df = (pd.read_csv(s3_address_split[3]))
         return file_df
 
+    @staticmethod
     def extract_json_from_s3():
         """Extract data from a JSON file on S3 and converts to Pandas dataframe.
 
@@ -122,7 +149,11 @@ class DataExtractor:
         """
         s3 = boto3.client('s3')
         # The URL has been split up manually into the required arguements for the boto3 download function.
-        s3.download_file('data-handling-public', 'date_details.json', 'date_details.json')
+        s3.download_file(
+            'data-handling-public', 
+            'date_details.json', 
+            'date_details.json'
+        )
         json_as_df = (pd.read_json('date_details.json'))
         return json_as_df
         
